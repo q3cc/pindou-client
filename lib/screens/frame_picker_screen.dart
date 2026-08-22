@@ -146,15 +146,14 @@ class _FramePickerScreenState extends State<FramePickerScreen> {
     try {
       await controller.pause();
       await controller.seekTo(_position);
-      final Uint8List? data = await VideoThumbnail.thumbnailData(
+      final Uint8List data = await VideoThumbnail.thumbnailData(
         video: videoUrl.toString(),
         headers: mediaHeaders(widget.media.platform),
-        imageFormat: ImageFormat.JPEG,
         maxWidth: 2048,
         timeMs: _position.inMilliseconds,
         quality: 95,
       );
-      if (data == null || data.isEmpty) {
+      if (data.isEmpty) {
         throw StateError('empty frame');
       }
       if (!mounted) return;
