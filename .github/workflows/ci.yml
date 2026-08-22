@@ -53,7 +53,13 @@ jobs:
       - run: flutter create --platforms=android,ios .
       - run: flutter pub get
       - run: flutter build ios --debug --no-codesign
+      - name: Package unsigned IPA
+        run: |
+          mkdir -p build/ios/ipa/Payload
+          cp -R build/ios/iphoneos/Runner.app build/ios/ipa/Payload/
+          cd build/ios/ipa
+          zip -qry pindou-ios-unsigned.ipa Payload
       - uses: actions/upload-artifact@v4
         with:
-          name: pindou-ios-debug
-          path: build/ios/iphoneos/Runner.app
+          name: pindou-ios-unsigned
+          path: build/ios/ipa/pindou-ios-unsigned.ipa
