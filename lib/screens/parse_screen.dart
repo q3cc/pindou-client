@@ -110,7 +110,7 @@ class _ParseScreenState extends State<ParseScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('品豆'),
+        title: const Text('拼豆'),
         centerTitle: false,
       ),
       body: SafeArea(

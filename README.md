@@ -1,6 +1,6 @@
 # pindou-client
 
-品豆 Flutter 客户端，支持 iPadOS、Android 平板、iOS 手机和 Android 手机，适配优先级依次为 iPadOS、Android 平板、iOS 手机、Android 手机。
+拼豆 Flutter 客户端，支持 iPadOS、Android 平板、iOS 手机和 Android 手机，适配优先级依次为 iPadOS、Android 平板、iOS 手机、Android 手机。
 
 ## 开发
 

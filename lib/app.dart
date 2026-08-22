@@ -12,7 +12,7 @@ class PinDouApp extends StatelessWidget {
   Widget build(BuildContext context) {
     const seed = Color(0xFF476C5E);
     return MaterialApp(
-      title: '品豆',
+      title: '拼豆',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(

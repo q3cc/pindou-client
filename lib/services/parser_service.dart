@@ -46,7 +46,7 @@ class ParserService {
     try {
       return ParsedMedia.fromJson(data);
     } on FormatException catch (error) {
-      throw ParseException('${error.message}');
+      throw ParseException(error.message);
     }
   }
 }
