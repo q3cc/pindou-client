@@ -74,6 +74,7 @@ class _ParseScreenState extends State<ParseScreen> {
         await Navigator.of(context).push(
           MaterialPageRoute<void>(
             builder: (_) => ImageReadyScreen(
+              parserService: widget.parserService,
               title: media.title,
               images: [
                 for (var index = 0; index < media.images.length; index++)
@@ -90,7 +91,10 @@ class _ParseScreenState extends State<ParseScreen> {
       case MediaFlowStep.framePicker:
         await Navigator.of(context).push(
           MaterialPageRoute<void>(
-            builder: (_) => FramePickerScreen(media: media),
+            builder: (_) => FramePickerScreen(
+              media: media,
+              parserService: widget.parserService,
+            ),
           ),
         );
         return;
@@ -239,6 +243,11 @@ class _GuideCard extends StatelessWidget {
               number: '3',
               title: '选取动态画面',
               description: '实况或视频可以拖动时间轴，选择最合适的一帧。',
+            ),
+            const _GuideStep(
+              number: '4',
+              title: '识别豆图',
+              description: '在同一张模板中先框选材料图例，再框选完整网格。',
             ),
           ],
         ),

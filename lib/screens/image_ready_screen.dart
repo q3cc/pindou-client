@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
 import '../models/prepared_image.dart';
+import '../services/parser_service.dart';
+import 'template_crop_screen.dart';
 
 class ImageReadyScreen extends StatelessWidget {
   const ImageReadyScreen({
     required this.images,
+    required this.parserService,
     this.title = '',
     super.key,
   });
 
   final List<PreparedImage> images;
+  final ParserService parserService;
   final String title;
 
   @override
@@ -45,7 +49,18 @@ class ImageReadyScreen extends StatelessWidget {
                           childAspectRatio: 0.82,
                         ),
                         delegate: SliverChildBuilderDelegate(
-                          (context, index) => _ImageTile(image: images[index]),
+                          (context, index) => _ImageTile(
+                            image: images[index],
+                            onUseTemplate: () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => TemplateCropScreen(
+                                  source: images[index],
+                                  parserService: parserService,
+                                  title: title,
+                                ),
+                              ),
+                            ),
+                          ),
                           childCount: images.length,
                         ),
                       );
@@ -81,10 +96,12 @@ class _Header extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('可以进入下一步', style: Theme.of(context).textTheme.headlineSmall),
+                  Text('选择模板原图', style: Theme.of(context).textTheme.headlineSmall),
                   const SizedBox(height: 4),
                   Text(
-                    title.isEmpty ? '已准备 $count 张图片' : '$title · $count 张图片',
+                    title.isEmpty
+                        ? '从其中一张图连续框选材料图例和豆图网格'
+                        : '$title · 共 $count 张图片',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -99,9 +116,10 @@ class _Header extends StatelessWidget {
 }
 
 class _ImageTile extends StatelessWidget {
-  const _ImageTile({required this.image});
+  const _ImageTile({required this.image, required this.onUseTemplate});
 
   final PreparedImage image;
+  final VoidCallback onUseTemplate;
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +149,18 @@ class _ImageTile extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(14),
-            child: Text(image.label, style: Theme.of(context).textTheme.titleSmall),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(image.label, style: Theme.of(context).textTheme.titleSmall),
+                const SizedBox(height: 10),
+                FilledButton.tonalIcon(
+                  onPressed: onUseTemplate,
+                  icon: const Icon(Icons.crop_rounded),
+                  label: const Text('从这张图识别豆图'),
+                ),
+              ],
+            ),
           ),
         ],
       ),

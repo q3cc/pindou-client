@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  crop_your_image: ^2.0.0
   http: ^1.6.0
   video_player: ^2.14.0
   get_video_thumbnail: ^0.9.0

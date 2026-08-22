@@ -7,13 +7,19 @@ import 'package:video_player/video_player.dart';
 import '../core/media_headers.dart';
 import '../models/prepared_image.dart';
 import '../models/parsed_media.dart';
+import '../services/parser_service.dart';
 import '../widgets/adaptive_content_shell.dart';
 import 'image_ready_screen.dart';
 
 class FramePickerScreen extends StatefulWidget {
-  const FramePickerScreen({required this.media, super.key});
+  const FramePickerScreen({
+    required this.media,
+    required this.parserService,
+    super.key,
+  });
 
   final ParsedMedia media;
+  final ParserService parserService;
 
   @override
   State<FramePickerScreen> createState() => _FramePickerScreenState();
@@ -160,6 +166,7 @@ class _FramePickerScreenState extends State<FramePickerScreen> {
       await Navigator.of(context).pushReplacement(
         MaterialPageRoute<void>(
           builder: (_) => ImageReadyScreen(
+            parserService: widget.parserService,
             title: widget.media.title,
             images: [
               PreparedImage.memory(
