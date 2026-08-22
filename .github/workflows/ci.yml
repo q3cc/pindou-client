@@ -36,15 +36,27 @@ jobs:
           cache: true
       - run: flutter create --platforms=android,ios .
       - run: flutter pub get
-      - name: Build release APK
+      - name: Build optimized split APKs
         run: |
-          flutter build apk --release
-          mkdir -p dist
-          cp build/app/outputs/flutter-apk/app-release.apk dist/pindou.apk
+          flutter build apk --release --split-per-abi --obfuscate --split-debug-info=build/symbols/android
+          mkdir -p dist/compat
+          cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk dist/pindou.apk
+          cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk dist/compat/pindou-armeabi-v7a.apk
+          cp build/app/outputs/flutter-apk/app-x86_64-release.apk dist/compat/pindou-x86_64.apk
       - uses: actions/upload-artifact@v4
         with:
           name: pindou-apk
           path: dist/pindou.apk
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pindou-apk-compat
+          path: dist/compat/*.apk
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pindou-android-symbols
+          path: build/symbols/android
           if-no-files-found: error
 
   ios:
@@ -58,15 +70,20 @@ jobs:
       - run: flutter create --platforms=android,ios .
       - run: flutter pub get
       - name: Build unsigned release app
-        run: flutter build ios --release --no-codesign
+        run: flutter build ios --release --no-codesign --obfuscate --split-debug-info=build/symbols/ios
       - name: Package release IPA
         run: |
           mkdir -p build/ios/ipa/Payload
           cp -R build/ios/iphoneos/Runner.app build/ios/ipa/Payload/
           cd build/ios/ipa
-          zip -qry pindou.ipa Payload
+          zip -9qry pindou.ipa Payload
       - uses: actions/upload-artifact@v4
         with:
           name: pindou-ipa
           path: build/ios/ipa/pindou.ipa
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pindou-ios-symbols
+          path: build/symbols/ios
           if-no-files-found: error

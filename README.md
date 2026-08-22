@@ -17,5 +17,8 @@ flutter run --dart-define=PARSE_API_BASE_URL=http://你的服务地址:8787
 
 每次推送到 `main` 后，Actions 会完成分析、测试和双端 Release 构建，并直接生成：
 
-- `pindou.apk`：Android Release APK。
+- `pindou.apk`：针对现代 Android 手机和平板的 ARM64 Release APK；按 ABI 拆分，避免携带无关架构。
+- `pindou-apk-compat`：供旧 32 位 ARM 设备和 x86_64 设备使用的兼容 APK。
 - `pindou.ipa`：iOS/iPadOS 未签名 Release IPA，安装前需要使用个人 Apple ID 或开发证书签名。
+
+Release 构建启用 Dart 混淆和调试符号拆分；符号文件由 Actions 单独保存，不计入安装包体积。
